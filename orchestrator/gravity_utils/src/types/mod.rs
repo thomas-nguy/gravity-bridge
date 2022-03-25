@@ -3,6 +3,7 @@ mod ethereum_events;
 mod logic_call;
 mod signatures;
 mod valsets;
+pub mod config;
 
 use crate::error::GravityError;
 use ethers::prelude::*;
