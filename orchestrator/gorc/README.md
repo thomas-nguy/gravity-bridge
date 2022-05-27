@@ -17,7 +17,8 @@ The `Gorc` application is still under development. This is a comprehensive docum
 | eth-to-cosmos     | This command, send Ethereum to Cosmos                       |
 | help              | Help command to get usage information                       |
 | keys              | Key management commands for Ethereum and Cosmos             |
-| orchestrator      | Management commannds for the orchestrator                   |
+| orchestrator      | Management commands for the orchestrator                    |
+| relayer           | Management commands for the relayer                         |
 | print-config      | Command for printing configurations                         |
 | query             | Command to query state on either ethereum or cosmos chains  |
 | sign-delegate-keys| Sign delegate keys command                                  |
@@ -112,6 +113,12 @@ The `keys` command takes the following argument/flags;
 
 ```
 gorc orchestrator start
+```
+
+**relayer:** To start the relayer, run the command below:
+
+```
+gorc relayer start
 ```
 
 **print-config:** To print the config file in your console, run the command below.

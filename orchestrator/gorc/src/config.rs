@@ -92,7 +92,7 @@ impl Keystore {
             Keystore::File(path) => {
                 let keystore = Path::new(path);
                 let keystore = FsKeyStore::create_or_open(keystore)?;
-                keystore.load(&name)
+                keystore.load(name)
             }
             Keystore::Aws => {
                 let rt = tokio::runtime::Runtime::new()?;
@@ -109,7 +109,7 @@ impl Keystore {
             Keystore::File(path) => {
                 let keystore = Path::new(path);
                 let keystore = FsKeyStore::create_or_open(keystore)?;
-                keystore.info(&name)
+                keystore.info(name)
             }
             Keystore::Aws => {
                 let rt = tokio::runtime::Runtime::new()?;
@@ -129,7 +129,7 @@ impl Keystore {
             Keystore::File(path) => {
                 let keystore = Path::new(path);
                 let keystore = FsKeyStore::create_or_open(keystore)?;
-                keystore.store(&name, der)
+                keystore.store(name, der)
             }
             Keystore::Aws => {
                 let rt = tokio::runtime::Runtime::new()?;
@@ -146,7 +146,7 @@ impl Keystore {
             Keystore::File(path) => {
                 let keystore = Path::new(path);
                 let keystore = FsKeyStore::create_or_open(keystore)?;
-                keystore.delete(&name)
+                keystore.delete(name)
             }
             Keystore::Aws => {
                 let rt = tokio::runtime::Runtime::new()?;

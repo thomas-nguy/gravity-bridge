@@ -6,6 +6,7 @@ mod deploy;
 mod eth_to_cosmos;
 mod keys;
 mod orchestrator;
+mod relayer;
 mod print_config;
 mod query;
 mod sign_delegate_keys;
@@ -34,6 +35,9 @@ pub enum GorcCmd {
 
     #[clap(subcommand)]
     Orchestrator(orchestrator::OrchestratorCmd),
+
+    #[clap(subcommand)]
+    Relayer(relayer::RelayerCmd),
 
     PrintConfig(print_config::PrintConfigCmd),
 
