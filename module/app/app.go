@@ -30,6 +30,7 @@ import (
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/auth/vesting"
+	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
@@ -510,6 +511,7 @@ func NewGravityApp(
 		crisistypes.ModuleName,
 		genutiltypes.ModuleName,
 		paramstypes.ModuleName,
+		vestingtypes.ModuleName,
 		gravitytypes.ModuleName,
 	)
 	app.mm.SetOrderEndBlockers(
@@ -527,6 +529,7 @@ func NewGravityApp(
 		evidencetypes.ModuleName,
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
+		vestingtypes.ModuleName,
 		gravitytypes.ModuleName,
 	)
 	app.mm.SetOrderInitGenesis(
@@ -545,6 +548,7 @@ func NewGravityApp(
 		ibctransfertypes.ModuleName,
 		paramstypes.ModuleName,
 		upgradetypes.ModuleName,
+		vestingtypes.ModuleName,
 		gravitytypes.ModuleName,
 	)
 
