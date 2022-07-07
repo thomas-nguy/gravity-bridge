@@ -1,4 +1,5 @@
 mod batches;
+mod checksum;
 mod ethereum_events;
 mod gravity_contract_errors;
 mod logic_call;
