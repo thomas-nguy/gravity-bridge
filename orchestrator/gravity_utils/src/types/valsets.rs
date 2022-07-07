@@ -339,7 +339,11 @@ impl Ord for ValsetMember {
         if self.power != other.power {
             self.power.cmp(&other.power)
         } else {
-            self.eth_address.cmp(&other.eth_address).reverse()
+            let checksum_addr = eth_checksum::checksum(
+                &self.eth_address.unwrap_or_default().to_string());
+            let checksum_other = eth_checksum::checksum(
+                &other.eth_address.unwrap_or_default().to_string());
+            checksum_addr.cmp(&checksum_other).reverse()
         }
     }
 }
