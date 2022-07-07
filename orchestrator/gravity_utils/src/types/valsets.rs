@@ -341,7 +341,7 @@ impl Ord for ValsetMember {
         if self.power != other.power {
             self.power.cmp(&other.power)
         } else {
-            // Since gravity-bridge and ethers use checksum addresses
+            // Since gravity-bridge uses checksum addresses
             // we need to convert in order to do the comparison.
             let checksum_addr = checksum::checksum(
                 &self.eth_address.unwrap_or_default().to_hex());

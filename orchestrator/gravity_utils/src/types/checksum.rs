@@ -1,6 +1,8 @@
 use ethers::utils::hex;
 use sha3::{Digest, Keccak256};
 
+// Return the checksum address of an ethereum address
+// ref: https://github.com/miguelmota/rust-eth-checksum/blob/a29820686995955aea39dce475c862288d83d613/src/lib.rs
 pub fn checksum(address: &str) -> String {
     let address = address.trim_start_matches("0x").to_lowercase();
 
