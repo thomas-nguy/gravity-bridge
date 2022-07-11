@@ -217,6 +217,14 @@ func (k msgServer) SendToEthereum(c context.Context, msg *types.MsgSendToEthereu
 	types.NormalizeCoinDenom(&msg.Amount)
 	types.NormalizeCoinDenom(&msg.BridgeFee)
 
+	dest, err := types.NewEthAddress(msg.EthereumRecipient)
+	if err != nil {
+		return nil, sdkerrors.Wrap(err, "invalid eth dest")
+	}
+	if k.InvalidSendToEthAddress(ctx, *dest) {
+		return nil, sdkerrors.Wrap(err, "destination address is invalid or blacklisted")
+	}
+
 	txID, err := k.createSendToEthereum(ctx, sender, msg.EthereumRecipient, msg.Amount, msg.BridgeFee)
 	if err != nil {
 		return nil, err

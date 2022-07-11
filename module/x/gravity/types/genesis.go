@@ -3,6 +3,8 @@ package types
 import (
 	"bytes"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -64,6 +66,10 @@ var (
 
 	//  ParamStoreUnbondSlashingSignerSetTxsWindow stores unbond slashing valset window
 	ParamStoreUnbondSlashingSignerSetTxsWindow = []byte("UnbondSlashingSignerSetTxsWindow")
+
+	// ParamStoreEthereumBlacklist allows storage of blocked Ethereum addresses blocked for use with the bridge
+	// this could be for technical reasons (zero address) or non-technical reasons, these apply across all ERC20 tokens
+	ParamStoreEthereumBlacklist = []byte("EthereumBlacklist")
 
 	// Ensure that params implements the proper interface
 	_ paramtypes.ParamSet = &Params{}
@@ -134,6 +140,7 @@ func DefaultParams() *Params {
 		SlashFractionEthereumSignature:            sdk.NewDec(1).Quo(sdk.NewDec(1000)),
 		SlashFractionConflictingEthereumSignature: sdk.NewDec(1).Quo(sdk.NewDec(1000)),
 		UnbondSlashingSignerSetTxsWindow:          10000,
+		EthereumBlacklist:                         []string{},
 	}
 }
 
@@ -212,6 +219,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 		paramtypes.NewParamSetPair(ParamsStoreSlashFractionEthereumSignature, &p.SlashFractionEthereumSignature, validateSlashFractionEthereumSignature),
 		paramtypes.NewParamSetPair(ParamsStoreSlashFractionConflictingEthereumSignature, &p.SlashFractionConflictingEthereumSignature, validateSlashFractionConflictingEthereumSignature),
 		paramtypes.NewParamSetPair(ParamStoreUnbondSlashingSignerSetTxsWindow, &p.UnbondSlashingSignerSetTxsWindow, validateUnbondSlashingSignerSetTxsWindow),
+		paramtypes.NewParamSetPair(ParamStoreEthereumBlacklist, &p.EthereumBlacklist, validateEthereumBlacklistAddresses),
 	}
 }
 
@@ -356,6 +364,22 @@ func validateSlashFractionConflictingEthereumSignature(i interface{}) error {
 	// TODO: do we want to set some bounds on this value?
 	if _, ok := i.(sdk.Dec); !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+	return nil
+}
+
+func validateEthereumBlacklistAddresses(i interface{}) error {
+	strArr, ok := i.([]string)
+	if !ok {
+		return fmt.Errorf("invalid parameter type: %T", i)
+	}
+	for index, value := range strArr {
+		if err := ValidateEthAddress(value); err != nil {
+
+			if !strings.Contains(err.Error(), "empty, index is"+strconv.Itoa(index)) {
+				return err
+			}
+		}
 	}
 	return nil
 }

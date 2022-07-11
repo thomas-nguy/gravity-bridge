@@ -100,6 +100,7 @@ message Params {
     (gogoproto.nullable) = false
   ];
   uint64 unbond_slashing_signer_set_txs_window = 17;
+  repeated string ethereum_blacklist = 18;
 }
 
 // GenesisState struct

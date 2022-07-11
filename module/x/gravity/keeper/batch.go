@@ -31,9 +31,18 @@ func (k Keeper) BuildBatchTx(ctx sdk.Context, contractAddress common.Address, ma
 
 	var selectedStes []*types.SendToEthereum
 	k.iterateUnbatchedSendToEthereumsByContract(ctx, contractAddress, func(ste *types.SendToEthereum) bool {
-		selectedStes = append(selectedStes, ste)
-		k.deleteUnbatchedSendToEthereum(ctx, ste.Id, ste.Erc20Fee)
-		return len(selectedStes) == maxElements
+		dest, err := types.NewEthAddress(ste.EthereumRecipient)
+		if err != nil {
+			// should not happen as we verify before
+			panic("invalid destination address in unbatched SendToEthereum pool")
+		}
+		if !(k.IsOnBlacklist(ctx, *dest)) {
+			selectedStes = append(selectedStes, ste)
+			k.deleteUnbatchedSendToEthereum(ctx, ste.Id, ste.Erc20Fee)
+			return len(selectedStes) == maxElements
+		} else {
+			return false
+		}
 	})
 
 	// do not create batches that would contain no transactions, even if they are requested
