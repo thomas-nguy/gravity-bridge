@@ -752,5 +752,5 @@ func (k Keeper) IsOnBlacklist(ctx sdk.Context, addr types.EthAddress) bool {
 // Blocking some addresses is technically motivated, if any ERC20 transfers in a batch fail the entire batch
 // becomes impossible to execute.
 func (k Keeper) InvalidSendToEthAddress(ctx sdk.Context, addr types.EthAddress) bool {
-	return k.IsOnBlacklist(ctx, addr) || addr == types.ZeroAddress()
+	return k.IsOnBlacklist(ctx, addr)
 }

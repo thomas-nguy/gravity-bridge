@@ -140,7 +140,9 @@ func DefaultParams() *Params {
 		SlashFractionEthereumSignature:            sdk.NewDec(1).Quo(sdk.NewDec(1000)),
 		SlashFractionConflictingEthereumSignature: sdk.NewDec(1).Quo(sdk.NewDec(1000)),
 		UnbondSlashingSignerSetTxsWindow:          10000,
-		EthereumBlacklist:                         []string{},
+		EthereumBlacklist: []string{
+			ZeroAddressString,
+		},
 	}
 }
 
@@ -190,6 +192,10 @@ func (p Params) ValidateBasic() error {
 	}
 	if err := validateUnbondSlashingSignerSetTxsWindow(p.UnbondSlashingSignerSetTxsWindow); err != nil {
 		return sdkerrors.Wrap(err, "unbond slashing signersettx window")
+	}
+
+	if err := validateEthereumBlacklistAddresses(p.EthereumBlacklist); err != nil {
+		return sdkerrors.Wrap(err, "ethereum blacklist addresses")
 	}
 
 	return nil
