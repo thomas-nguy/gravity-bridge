@@ -4,11 +4,10 @@ import (
 	"bytes"
 	"encoding/hex"
 	"fmt"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"strings"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/common"
+	"strings"
 )
 
 const (
@@ -77,11 +76,11 @@ func ValidateEthAddress(address string) error {
 		return fmt.Errorf("empty")
 	}
 
-	// An auditor recommended we should check the error of hex.DecodeString, given that geth's HexToAddress ignores it
 	if has0xPrefix(address) {
 		address = address[2:]
 	}
 
+	// An auditor recommended we should check the error of hex.DecodeString, given that geth's HexToAddress ignores it
 	if _, err := hex.DecodeString(address); err != nil {
 		return fmt.Errorf("invalid hex with error: %s", err)
 	}

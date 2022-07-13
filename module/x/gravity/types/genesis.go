@@ -3,8 +3,6 @@ package types
 import (
 	"bytes"
 	"fmt"
-	"strconv"
-	"strings"
 	"time"
 
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -68,7 +66,6 @@ var (
 	ParamStoreUnbondSlashingSignerSetTxsWindow = []byte("UnbondSlashingSignerSetTxsWindow")
 
 	// ParamStoreEthereumBlacklist allows storage of blocked Ethereum addresses blocked for use with the bridge
-	// this could be for technical reasons (zero address) or non-technical reasons, these apply across all ERC20 tokens
 	ParamStoreEthereumBlacklist = []byte("EthereumBlacklist")
 
 	// Ensure that params implements the proper interface
@@ -379,12 +376,9 @@ func validateEthereumBlacklistAddresses(i interface{}) error {
 	if !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
-	for index, value := range strArr {
+	for _, value := range strArr {
 		if err := ValidateEthAddress(value); err != nil {
-
-			if !strings.Contains(err.Error(), "empty, index is"+strconv.Itoa(index)) {
-				return err
-			}
+			return err
 		}
 	}
 	return nil
