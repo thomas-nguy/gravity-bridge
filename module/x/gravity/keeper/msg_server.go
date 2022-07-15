@@ -221,7 +221,7 @@ func (k msgServer) SendToEthereum(c context.Context, msg *types.MsgSendToEthereu
 	if err != nil {
 		return nil, sdkerrors.Wrap(err, "invalid eth dest")
 	}
-	if k.InvalidSendToEthAddress(ctx, *dest) {
+	if k.IsOnBlacklist(ctx, *dest) {
 		return nil, fmt.Errorf("destination address is invalid or blacklisted")
 	}
 

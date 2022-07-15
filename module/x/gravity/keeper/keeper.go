@@ -744,13 +744,3 @@ func (k Keeper) IsOnBlacklist(ctx sdk.Context, addr types.EthAddress) bool {
 	}
 	return false
 }
-
-// InvalidSendToEthAddress Returns true if the provided address is invalid to send to Ethereum this could be
-// for one of several reasons. (1) it is invalid in general like the Zero address, (2)
-// it is invalid for a subset of ERC20 addresses or (3) it is on the governance deposit/withdraw
-// blacklist. (2) is not yet implemented
-// Blocking some addresses is technically motivated, if any ERC20 transfers in a batch fail the entire batch
-// becomes impossible to execute.
-func (k Keeper) InvalidSendToEthAddress(ctx sdk.Context, addr types.EthAddress) bool {
-	return k.IsOnBlacklist(ctx, addr)
-}
