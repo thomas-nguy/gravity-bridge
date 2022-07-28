@@ -134,6 +134,11 @@ contract Gravity is ReentrancyGuard {
 		uint256 _eventNonce
 	);
 
+	modifier onlySelf {
+		require(msg.sender == address(this));
+		_;
+	}
+
 	// TEST FIXTURES
 	// These are here to make it easier to measure gas usage. They should be removed before production
 	function testMakeCheckpoint(ValsetArgs calldata _valsetArgs, bytes32 _gravityId) external pure {
@@ -453,15 +458,15 @@ function updateValset(
 	}
 
 	function transferNoRevert(address token, address to, uint value) internal {
-		try IERC20(token).transfer(to, value) returns (bool success){
-			if (!success) {
-				state_RevertedVouchers[state_lastRevertedNonce] = TransferReverted(token, to, value, true);
-				state_lastRevertedNonce = state_lastRevertedNonce + 1;
-			}
+		try this.safeTransferSelf(token,to, value) {
 		} catch {
 			state_RevertedVouchers[state_lastRevertedNonce] = TransferReverted(token, to, value, true);
 			state_lastRevertedNonce = state_lastRevertedNonce + 1;
 		}
+	}
+
+	function safeTransferSelf(address token, address to, uint value) public onlySelf {
+		IERC20(token).safeTransfer(to, value);
 	}
 
 	function redeemVoucher(
@@ -473,6 +478,7 @@ function updateValset(
 			require(voucher.destination == msg.sender);
 			IERC20(voucher.tokenContract).safeTransfer(_newDestination, voucher.amount);
 			state_RevertedVouchers[_nonce].activate = false;
+			state_RevertedVouchers[_nonce].amount = 0;
 		}
 	}
 
