@@ -263,7 +263,7 @@ contract Gravity is ReentrancyGuard {
 	// generated from the new valset.
 	// Anyone can call this function, but they must supply valid signatures of state_powerThreshold of the current valset over
 	// the new valset.
-function updateValset(
+    function updateValset(
 		// The new version of the validator set
 		ValsetArgs calldata _newValset,
 		// The current validators that approve the change
@@ -476,9 +476,9 @@ function updateValset(
 		if(state_RevertedVouchers[_nonce].activate){
 			TransferReverted memory voucher = state_RevertedVouchers[_nonce];
 			require(voucher.destination == msg.sender);
-			IERC20(voucher.tokenContract).safeTransfer(_newDestination, voucher.amount);
 			state_RevertedVouchers[_nonce].activate = false;
 			state_RevertedVouchers[_nonce].amount = 0;
+			IERC20(voucher.tokenContract).safeTransfer(_newDestination, voucher.amount);
 		}
 	}
 
