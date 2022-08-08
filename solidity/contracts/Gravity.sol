@@ -135,7 +135,7 @@ contract Gravity is ReentrancyGuard {
 	);
 
 	modifier onlySelf {
-		require(msg.sender == address(this));
+		require(msg.sender == address(this), "Can only be invoked by contract");
 		_;
 	}
 
@@ -475,7 +475,7 @@ contract Gravity is ReentrancyGuard {
 	) public nonReentrant {
 		if(state_RevertedVouchers[_nonce].activate){
 			TransferReverted memory voucher = state_RevertedVouchers[_nonce];
-			require(voucher.destination == msg.sender);
+			require(voucher.destination == msg.sender, "Can only be redeemed by intended recipient");
 			state_RevertedVouchers[_nonce].activate = false;
 			state_RevertedVouchers[_nonce].amount = 0;
 			IERC20(voucher.tokenContract).safeTransfer(_newDestination, voucher.amount);
